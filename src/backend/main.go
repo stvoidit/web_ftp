@@ -26,6 +26,15 @@ func humanReadableSize(n int64) (hrs string) {
 	return
 }
 
+func responseError(w http.ResponseWriter, err error) {
+	log.Println(err)
+	w.Header().Add("content-type", "application/json")
+	w.WriteHeader(http.StatusServiceUnavailable)
+	if err := json.NewEncoder(w).Encode(map[string]string{"error": err.Error()}); err != nil {
+		panic(err)
+	}
+}
+
 // FileEntity - файл или папка
 type FileEntity struct {
 	Path   string `json:"path"`
@@ -37,7 +46,8 @@ type FileEntity struct {
 
 func filesystem(w http.ResponseWriter, r *http.Request) {
 	defer log.Println(r.Method, r.RequestURI, r.ContentLength)
-	const startDir = `/mnt/d`
+	// var startDir, _ = os.UserHomeDir()
+	const startDir = "/mnt/d"
 	var qfe FileEntity
 	if r.Method == http.MethodPost {
 		if err := json.NewDecoder(r.Body).Decode(&qfe); err != nil {
@@ -47,12 +57,14 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", strconv.Quote(qfe.Name)))
 			f, err := os.Open(path.Join(qfe.Path, qfe.Name))
 			if err != nil {
-				panic(err)
+				responseError(w, err)
+				return
 			}
 			w.Header().Set("Content-Length", strconv.Itoa(int(qfe.Size)))
 			defer f.Close()
 			if _, err := io.Copy(w, f); err != nil {
-				panic(err)
+				responseError(w, err)
+				return
 			}
 			return
 		}
@@ -64,7 +76,8 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 
 	dfs, err := os.ReadDir(FPath)
 	if err != nil {
-		panic(err)
+		responseError(w, err)
+		return
 	}
 
 	var data = make([]FileEntity, len(dfs))

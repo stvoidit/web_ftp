@@ -79,6 +79,16 @@ export default {
             });
         });
 
+        const catchError = (error) => {
+            let msg;
+            if (error.response) {
+                msg = error.response.data.error;
+            } else {
+                msg = error;
+            }
+            alert(msg);
+        };
+
         const downloadFile = (obj) => {
             // if file do download
             const downloadAPI = axios.create({
@@ -95,7 +105,7 @@ export default {
                 link.click();
                 link.remove();
                 obj.downloadProgress = 0.0;
-            });
+            }).catch(catchError);
         };
 
         const getDir = (obj) => {
@@ -103,7 +113,7 @@ export default {
             api.post("/fs", obj).then(res => {
                 values.value = res.data.values;
                 prevDir.value = res.data.prevPath;
-            });
+            }).catch(catchError);
         };
 
         const actionHandler = (obj) => {
