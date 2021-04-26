@@ -45,7 +45,6 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 		}
 		if !qfe.IsDir {
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", strconv.Quote(qfe.Name)))
-			w.Header().Set("x-suggested-filename", qfe.Name)
 			f, err := os.Open(path.Join(qfe.Path, qfe.Name))
 			if err != nil {
 				panic(err)

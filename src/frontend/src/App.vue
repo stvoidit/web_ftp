@@ -65,7 +65,7 @@ export default {
                 const url = window.URL.createObjectURL(new Blob([res.data]));
                 const link = document.createElement("a");
                 link.href = url;
-                link.setAttribute("download", res.headers["x-suggested-filename"]);
+                link.setAttribute("download", obj.name);
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
