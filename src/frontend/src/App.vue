@@ -1,7 +1,6 @@
 <template>
     <div class="container-fluid">
         <h4>{{ prevDir }}</h4>
-
         <div class="btn-group-vertical">
             <button
                 class="btn btn-info block mb-1"
