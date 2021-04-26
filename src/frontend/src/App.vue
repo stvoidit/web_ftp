@@ -42,8 +42,8 @@ export default {
         const title = ref("referf");
         const prevDir = ref("");
         const api = axios.create();
-        const downloadProgress = ref(0.0);
         let values = ref([]);
+
         api.get("/fs").then(res => {
             prevDir.value = res.data.prevPath;
             values.value = res.data.values.map(e => {
@@ -54,7 +54,7 @@ export default {
             });
         });
 
-        const downloadFile =(obj) => {
+        const downloadFile = (obj) => {
             // if file do download
             const downloadAPI = axios.create({
                 onDownloadProgress:(eventdownload) => {
@@ -93,8 +93,7 @@ export default {
             title,
             prevDir,
             values,
-            actionHandler,
-            downloadProgress
+            actionHandler
         };
     }
 };
