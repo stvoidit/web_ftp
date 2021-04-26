@@ -36,7 +36,7 @@ type FileEntity struct {
 }
 
 func filesystem(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Method, r.RequestURI)
+	defer log.Println(r.Method, r.RequestURI, r.ContentLength)
 	const startDir = `/mnt/d`
 	var qfe FileEntity
 	if r.Method == http.MethodPost {
@@ -89,6 +89,7 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(map[string]interface{}{"prevPath": FPath, "values": data}); err != nil {
 		panic(err)
 	}
+
 }
 
 func main() {
