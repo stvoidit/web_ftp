@@ -28,10 +28,11 @@ func humanReadableSize(n int64) (hrs string) {
 
 // FileEntity - ...
 type FileEntity struct {
-	Path  string `json:"path"`
-	Name  string `json:"name"`
-	IsDir bool   `json:"isDir"`
-	Size  string `json:"size,omitempty"`
+	Path   string `json:"path"`
+	Name   string `json:"name"`
+	IsDir  bool   `json:"isDir"`
+	HrSize string `json:"hrSize,omitempty"`
+	Size   int64  `json:"size,omitempty"`
 }
 
 func filesystem(w http.ResponseWriter, r *http.Request) {
@@ -49,6 +50,7 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				panic(err)
 			}
+			w.Header().Set("Content-Length", strconv.Itoa(int(qfe.Size)))
 			defer f.Close()
 			if _, err := io.Copy(w, f); err != nil {
 				panic(err)
@@ -68,16 +70,19 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 
 	var data = make([]FileEntity, len(dfs))
 	for i, fe := range dfs {
-		var size string
+		var hrsize string
+		var size int64
 		isDir := fe.IsDir()
 		if !isDir {
 			fi, err := fe.Info()
 			if err != nil {
 				continue
 			}
-			size = humanReadableSize(fi.Size())
+			_size := fi.Size()
+			hrsize = humanReadableSize(_size)
+			size = _size
 		}
-		var fe = FileEntity{Name: fe.Name(), IsDir: isDir, Path: FPath, Size: size}
+		var fe = FileEntity{Name: fe.Name(), IsDir: isDir, Path: FPath, HrSize: hrsize, Size: size}
 		data[i] = fe
 	}
 	w.Header().Add("content-type", "application/json")
