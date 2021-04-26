@@ -2,6 +2,15 @@ import { ref, computed } from 'vue';
 import axios from "axios";
 
 const api = axios.create();
+api.get("/fs").then(res => {
+    prevDir.value = res.data.prevPath;
+    files.value = res.data.files.map(e => {
+        if (!e.isDir) {
+            e.downloadProgress = 0.0;
+        }
+        return e;
+    });
+});
 function catchError(error) {
     let msg;
     if (error.response) {
@@ -29,19 +38,23 @@ function downloadFile(obj = Object) {
         obj.downloadProgress = 0.0;
     }).catch(catchError);
 }
-export default () => {
-    const title = ref("referf");
-    const prevDir = ref("");
-    const files = ref([]);
-    const listDownload = ref([]);
-    const totalDownloadSize = computed(() => {
-        let totalSize = 0;
-        listDownload.value.forEach(e => {
-            totalSize += e.size;
-        });
-        return totalSize;
+
+const title = ref("referf");
+const prevDir = ref("");
+const files = ref([]);
+const listDownload = ref([]);
+const totalDownloadSize = computed(() => {
+    let totalSize = 0;
+    listDownload.value.forEach(e => {
+        totalSize += e.size;
     });
-    api.get("/fs").then(res => {
+    return totalSize;
+});
+
+
+function getDir(obj = Object) {
+    // if dir fetch includes
+    api.post("/fs", obj).then(res => {
         prevDir.value = res.data.prevPath;
         files.value = res.data.files.map(e => {
             if (!e.isDir) {
@@ -49,45 +62,31 @@ export default () => {
             }
             return e;
         });
-    });
-
-    function getDir(obj = Object) {
-        // if dir fetch includes
-        api.post("/fs", obj).then(res => {
-            prevDir.value = res.data.prevPath;
-            files.value = res.data.files.map(e => {
-                if (!e.isDir) {
-                    e.downloadProgress = 0.0;
-                }
-                return e;
-            });
-        }).catch(catchError);
+    }).catch(catchError);
+}
+function actionHandler(obj = Object) {
+    // cd or download
+    if (obj.isDir) {
+        getDir(obj);
+    } else {
+        downloadFile(obj);
     }
-    function actionHandler(obj = Object) {
-        // cd or download
-        if (obj.isDir) {
-            getDir(obj);
-        } else {
-            downloadFile(obj);
-        }
-    }
-    function dragStart(event) {
-        event.dataTransfer.setData("FileIndex", event.target.id);
-    }
-    function drop(event) {
-        event.preventDefault();
-        let dataIndex = event.dataTransfer.getData("FileIndex");
-        listDownload.value.push(files.value[dataIndex]);
-    }
-
-    return {
-        title,
-        prevDir,
-        files,
-        listDownload,
-        actionHandler,
-        dragStart,
-        drop,
-        totalDownloadSize
-    };
+}
+function dragStart(event) {
+    event.dataTransfer.setData("FileIndex", event.target.id);
+}
+function drop(event) {
+    event.preventDefault();
+    let dataIndex = event.dataTransfer.getData("FileIndex");
+    listDownload.value.push(files.value[dataIndex]);
+}
+export default {
+    title,
+    prevDir,
+    files,
+    listDownload,
+    actionHandler,
+    dragStart,
+    drop,
+    totalDownloadSize
 };
