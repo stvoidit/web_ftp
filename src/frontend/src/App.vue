@@ -59,7 +59,6 @@
 </template>
 
 <script>
-
 import state from "./state";
 export default {
     setup() {
