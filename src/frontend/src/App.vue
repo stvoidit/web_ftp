@@ -4,7 +4,7 @@
         <div class="btn-group-vertical">
             <button
                 class="btn btn-info block mb-1"
-                @click="getDirHandler({path: prevDir, name:'..', isDir: true})">
+                @click="actionHandler({path: prevDir, name:'..', isDir: true})">
                 ...
             </button>
             <button
@@ -12,7 +12,7 @@
                 :key="v.name"
                 :class="{'btn-primary': v.isDir}"
                 class="btn btn-sm block mb-1"
-                @click="getDirHandler(v)">
+                @click="actionHandler(v)">
                 {{ v.name }}
                 <template v-if="v.size">
                     [{{ v.size }}]
@@ -37,36 +37,40 @@ export default {
             prevDir.value = res.data.prevPath;
         });
 
-        function getDirHandler (obj) {
-            // cd or download
-            let responseType ;
-            if (!obj.isDir) {
-                responseType = "blob";
-            }
-
-            api.post("/fs", obj, {responseType: responseType}).then(res => {
-                if (res.headers["x-suggested-filename"]) {
-                    const url = window.URL.createObjectURL(new Blob([res.data]));
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.setAttribute("download", res.headers["x-suggested-filename"]);
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-                } else {
-                    values.value = res.data.values;
-                    prevDir.value = res.data.prevPath;
-                }
-
+        function downloadFile(obj) {
+            // if file do download
+            api.post("/fs", obj, {responseType: "blob"}).then(res => {
+                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", res.headers["x-suggested-filename"]);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
             });
         }
 
+        function getDir(obj) {
+            // if dir fetch includes
+            api.post("/fs", obj).then(res => {
+                values.value = res.data.values;
+                prevDir.value = res.data.prevPath;
+            });
+        }
 
+        function actionHandler (obj) {
+            // cd or download
+            if (obj.isDir) {
+                getDir(obj);
+            } else {
+                downloadFile(obj);
+            }
+        }
         return {
             title,
             prevDir,
             values,
-            getDirHandler
+            actionHandler
         };
     }
 };

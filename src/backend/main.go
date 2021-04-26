@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -34,6 +35,7 @@ type FileEntity struct {
 }
 
 func filesystem(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Method, r.RequestURI)
 	const startDir = `/mnt/d`
 	var qfe FileEntity
 	if r.Method == http.MethodPost {
