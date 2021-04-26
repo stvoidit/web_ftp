@@ -10,12 +10,27 @@ import (
 	"strconv"
 )
 
+func humanReadableSize(n int64) (hrs string) {
+	if n == 0 {
+		return ""
+	}
+	const Mb = 1048576
+	const GB = 1073741824
+	switch {
+	case n >= Mb && n < GB:
+		hrs = fmt.Sprintf("%dMb", n/Mb)
+	case n >= GB:
+		hrs = fmt.Sprintf("%dGb", n/GB)
+	}
+	return
+}
+
 // FileEntity - ...
 type FileEntity struct {
 	Path  string `json:"path"`
 	Name  string `json:"name"`
 	IsDir bool   `json:"isDir"`
-	Size  int64  `json:"size,omitempty"`
+	Size  string `json:"size,omitempty"`
 }
 
 func filesystem(w http.ResponseWriter, r *http.Request) {
@@ -51,14 +66,14 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 
 	var data = make([]FileEntity, len(dfs))
 	for i, fe := range dfs {
-		var size int64
+		var size string
 		isDir := fe.IsDir()
 		if !isDir {
 			fi, err := fe.Info()
 			if err != nil {
 				continue
 			}
-			size = fi.Size()
+			size = humanReadableSize(fi.Size())
 		}
 		var fe = FileEntity{Name: fe.Name(), IsDir: isDir, Path: FPath, Size: size}
 		data[i] = fe

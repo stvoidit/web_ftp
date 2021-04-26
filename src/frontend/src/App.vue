@@ -14,7 +14,9 @@
                 class="btn btn-sm block mb-1"
                 @click="getDirHandler(v)">
                 {{ v.name }}
-                {{ v.size }}
+                <template v-if="v.size">
+                    [{{ v.size }}]
+                </template>
             </button>
         </div>
     </div>
