@@ -13,7 +13,7 @@ import (
 
 func humanReadableSize(n int64) (hrs string) {
 	if n == 0 {
-		return ""
+		return
 	}
 	const Mb = 1048576
 	const GB = 1073741824
@@ -26,7 +26,7 @@ func humanReadableSize(n int64) (hrs string) {
 	return
 }
 
-// FileEntity - ...
+// FileEntity - файл или папка
 type FileEntity struct {
 	Path   string `json:"path"`
 	Name   string `json:"name"`

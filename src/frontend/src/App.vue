@@ -1,20 +1,9 @@
 <template>
     <div class="container-fluid">
         <h4>{{ prevDir }}</h4>
-        <div
-            v-if="downloadProgress"
-            class="progress">
-            <div
-                :style="{width: `${downloadProgress}%`}"
-                class="progress-bar"
-                role="progressbar"
-                :aria-valuenow="downloadProgress"
-                aria-valuemin="0"
-                aria-valuemax="100" />
-        </div>
         <div class="btn-group-vertical">
             <button
-                class="btn btn-info block mb-1"
+                class="btn btn-info btn-sm block mb-1"
                 @click="actionHandler({path: prevDir, name:'..', isDir: true})">
                 ...
             </button>
@@ -27,6 +16,17 @@
                 {{ v.name }}
                 <template v-if="v.hrSize">
                     [{{ v.hrSize }}]
+                    <div
+                        v-if="v.downloadProgress"
+                        class="progress">
+                        <div
+                            :style="{width: `${v.downloadProgress}%`}"
+                            class="progress-bar"
+                            role="progressbar"
+                            :aria-valuenow="v.downloadProgress"
+                            aria-valuemin="0"
+                            aria-valuemax="100" />
+                    </div>
                 </template>
             </button>
         </div>
@@ -45,16 +45,20 @@ export default {
         const downloadProgress = ref(0.0);
         let values = ref([]);
         api.get("/fs").then(res => {
-            values.value = res.data.values;
             prevDir.value = res.data.prevPath;
+            values.value = res.data.values.map(e => {
+                if (!e.isDir) {
+                    e.downloadProgress = 0.0;
+                }
+                return e;
+            });
         });
 
         function downloadFile(obj) {
             // if file do download
             const downloadAPI = axios.create({
                 onDownloadProgress:(eventdownload) => {
-                    downloadProgress.value = (eventdownload.loaded / eventdownload.total) * 100.;
-
+                    obj.downloadProgress = (eventdownload.loaded / eventdownload.total) * 100.;
                 }
             });
             downloadAPI.post("/fs", obj, {responseType: "blob"}).then(res => {
@@ -65,13 +69,12 @@ export default {
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
-                downloadProgress.value = 0.0;
+                obj.downloadProgress = 0.0;
             });
         }
 
         function getDir(obj) {
             // if dir fetch includes
-
             api.post("/fs", obj).then(res => {
                 values.value = res.data.values;
                 prevDir.value = res.data.prevPath;
