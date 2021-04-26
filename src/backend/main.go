@@ -22,6 +22,8 @@ func humanReadableSize(n int64) (hrs string) {
 		hrs = fmt.Sprintf("%dMb", n/Mb)
 	case n >= GB:
 		hrs = fmt.Sprintf("%dGb", n/GB)
+	default:
+		hrs = fmt.Sprintf("%db", n)
 	}
 	return
 }
@@ -99,7 +101,7 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Add("content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(map[string]interface{}{"prevPath": FPath, "values": data}); err != nil {
+	if err := json.NewEncoder(w).Encode(map[string]interface{}{"prevPath": FPath, "files": data}); err != nil {
 		panic(err)
 	}
 

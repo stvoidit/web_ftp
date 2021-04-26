@@ -10,7 +10,7 @@
                         ...
                     </button>
                     <button
-                        v-for="(v, index) in values"
+                        v-for="(v, index) in files"
                         :id="index"
                         :key="v.name"
                         draggable="true"
@@ -59,91 +59,25 @@
 </template>
 
 <script>
-import { ref,computed } from 'vue';
-import axios from "axios";
+
+import state from "./state";
 export default {
     setup() {
-        const title = ref("referf");
-        const prevDir = ref("");
-        const api = axios.create();
-        let values = ref([]);
-        let listDownload = ref([]);
+        const {
+            title,
+            prevDir,
+            files,
+            listDownload,
+            actionHandler,
+            dragStart,
+            drop,
+            totalDownloadSize
+        } = state();
 
-        api.get("/fs").then(res => {
-            prevDir.value = res.data.prevPath;
-            values.value = res.data.values.map(e => {
-                if (!e.isDir) {
-                    e.downloadProgress = 0.0;
-                }
-                return e;
-            });
-        });
-
-        const catchError = (error) => {
-            let msg;
-            if (error.response) {
-                msg = error.response.data.error;
-            } else {
-                msg = error;
-            }
-            alert(msg);
-        };
-
-        const downloadFile = (obj) => {
-            // if file do download
-            const downloadAPI = axios.create({
-                onDownloadProgress:(eventdownload) => {
-                    obj.downloadProgress = (eventdownload.loaded / eventdownload.total) * 100.;
-                }
-            });
-            downloadAPI.post("/fs", obj, {responseType: "blob"}).then(res => {
-                const url = window.URL.createObjectURL(new Blob([res.data]));
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute("download", obj.name);
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                obj.downloadProgress = 0.0;
-            }).catch(catchError);
-        };
-
-        const getDir = (obj) => {
-            // if dir fetch includes
-            api.post("/fs", obj).then(res => {
-                values.value = res.data.values;
-                prevDir.value = res.data.prevPath;
-            }).catch(catchError);
-        };
-
-        const actionHandler = (obj) => {
-            // cd or download
-            if (obj.isDir) {
-                getDir(obj);
-            } else {
-                downloadFile(obj);
-            }
-        };
-
-        const dragStart = (event) => {
-            event.dataTransfer.setData("FileIndex", event.target.id);
-        };
-        const drop = (event) => {
-            event.preventDefault();
-            let dataIndex = event.dataTransfer.getData("FileIndex");
-            listDownload.value.push(values.value[dataIndex]);
-        };
-        const totalDownloadSize = computed(() => {
-            let totalSize = 0;
-            listDownload.value.forEach(e => {
-                totalSize+=e.size;
-            });
-            return totalSize;
-        });
         return {
             title,
             prevDir,
-            values,
+            files,
             actionHandler,
             listDownload,
             dragStart,
