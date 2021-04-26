@@ -1,0 +1,115 @@
+{
+  "name": "proj1",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint --fix"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "core-js": "^3.6.5",
+    "global": "^4.4.0",
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.25.0",
+    "eslint-plugin-vue": "^7.9.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-recommended",
+      "eslint:recommended"
+    ],
+    "rules": {
+      "vue/custom-event-name-casing": 0,
+      "vue/no-lone-template": 0,
+      "comma-dangle": [
+        "warn",
+        "never"
+      ],
+      "no-console": "warn",
+      "no-unused-vars": "warn",
+      "vue/no-unused-components": "warn",
+      "array-bracket-newline": [
+        "warn",
+        {
+          "multiline": true,
+          "minItems": 2
+        }
+      ],
+      "array-element-newline": [
+        "warn",
+        "always"
+      ],
+      "indent": [
+        "warn",
+        4
+      ],
+      "semi": [
+        "warn",
+        "always"
+      ],
+      "vue/script-indent": [
+        "warn",
+        4,
+        {
+          "baseIndent": 0,
+          "switchCase": 0,
+          "ignores": []
+        }
+      ],
+      "vue/html-indent": [
+        "warn",
+        4,
+        {
+          "attribute": 1,
+          "baseIndent": 1,
+          "closeBracket": 0,
+          "alignAttributesVertically": true,
+          "ignores": []
+        }
+      ],
+      "vue/html-closing-bracket-newline": [
+        "warn",
+        {
+          "singleline": "never",
+          "multiline": "never"
+        }
+      ],
+      "vue/html-self-closing": [
+        "warn",
+        {
+          "html": {
+            "void": "any",
+            "normal": "always",
+            "component": "always"
+          },
+          "svg": "always",
+          "math": "always"
+        }
+      ]
+    },
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+      "parser": "babel-eslint",
+      "ecmaVersion": 6
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
