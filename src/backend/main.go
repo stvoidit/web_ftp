@@ -86,8 +86,11 @@ sendDir:
 		return
 	}
 
-	var data = make([]FileEntity, len(dfs))
-	for i, fe := range dfs {
+	var data = make([]FileEntity, 0)
+	for _, fe := range dfs {
+		if fe.Name() == "" {
+			continue
+		}
 		var hrsize string
 		var size int64
 		isDir := fe.IsDir()
@@ -101,7 +104,7 @@ sendDir:
 			size = _size
 		}
 		var fe = FileEntity{Name: fe.Name(), IsDir: isDir, Path: FPath, HrSize: hrsize, Size: size}
-		data[i] = fe
+		data = append(data, fe)
 	}
 	w.Header().Add("content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
