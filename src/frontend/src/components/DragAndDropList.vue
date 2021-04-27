@@ -8,21 +8,30 @@
             }"
             @drop="drop">
             <div
-                v-for="d in listDownload"
-                :key="d.name"
+                v-for="file in listDownload"
+                :key="file.name"
                 class="mr-1 mb-1 row text-left">
                 <div class="col-auto">
-                    {{ `${d.path}/${d.name }` }}
+                    <button
+                        class="btn btn-sm btn-danger block"
+                        @click="removeFromListDownload(file)">
+                        x
+                    </button>
+                </div>
+                <div class="col-5">
+                    {{ `${file.path}/${file.name }` }}
                 </div>
                 <div
                     class="progress col mt-1">
                     <div
-                        :style="{width: `${d.downloadProgress}%`}"
+                        :style="{width: `${file.downloadProgress}%`}"
                         class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                         role="progressbar"
-                        :aria-valuenow="d.downloadProgress"
+                        :aria-valuenow="file.downloadProgress"
                         aria-valuemin="0"
-                        aria-valuemax="100" />
+                        aria-valuemax="100">
+                        {{ file.downloadProgress.toFixed(2) }}%
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,7 +72,8 @@ export default {
             drop,
             totalDownloadSize,
             downloadFile,
-            DownloadFiles
+            DownloadFiles,
+            removeFromListDownload
         };
     }
 };

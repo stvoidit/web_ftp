@@ -7,27 +7,29 @@
             ...
         </button>
         <button
-            v-for="(v, index) in files"
+            v-for="(file, index) in files"
             :id="index"
-            :key="v.name"
+            :key="file.name"
             draggable="true"
-            :class="{'btn-primary': v.isDir, 'btn-outline-dark': !v.isDir}"
+            :class="{'btn-primary': file.isDir, 'btn-outline-dark': !file.isDir}"
             class="btn btn-sm block mb-1"
             @dragstart="dragStart"
-            @click="actionHandler(v)">
-            {{ v.name }}
-            <template v-if="v.hrSize">
-                [{{ v.hrSize }}]
+            @click="actionHandler(file)">
+            {{ file.name }}
+            <template v-if="file.hrSize">
+                [{{ file.hrSize }}]
                 <div
-                    v-if="v.downloadProgress"
+                    v-if="file.downloadProgress"
                     class="progress">
                     <div
-                        :style="{width: `${v.downloadProgress}%`}"
+                        :style="{width: `${file.downloadProgress}%`}"
                         class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                         role="progressbar"
-                        :aria-valuenow="v.downloadProgress"
+                        :aria-valuenow="file.downloadProgress"
                         aria-valuemin="0"
-                        aria-valuemax="100" />
+                        aria-valuemax="100">
+                        {{ file.downloadProgress.toFixed(2) }}%
+                    </div>
                 </div>
             </template>
         </button>
