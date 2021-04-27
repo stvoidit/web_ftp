@@ -21,16 +21,18 @@
                 <div class="col-5">
                     {{ `${file.path}/${file.name }` }}
                 </div>
-                <div
-                    class="progress col mt-1">
+                <div class="col mt-1">
                     <div
-                        :style="{width: `${file.downloadProgress}%`}"
-                        class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                        role="progressbar"
-                        :aria-valuenow="file.downloadProgress"
-                        aria-valuemin="0"
-                        aria-valuemax="100">
-                        {{ file.downloadProgress.toFixed(2) }}%
+                        class="progress ">
+                        <div
+                            :style="{width: `${file.downloadProgress}%`}"
+                            class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                            role="progressbar"
+                            :aria-valuenow="file.downloadProgress"
+                            aria-valuemin="0"
+                            aria-valuemax="100">
+                            {{ file.downloadProgress.toFixed(2) }}%
+                        </div>
                     </div>
                 </div>
             </div>
