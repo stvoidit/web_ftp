@@ -53,7 +53,10 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 	var qfe FileEntity
 	if r.Method == http.MethodPost {
 		if err := json.NewDecoder(r.Body).Decode(&qfe); err != nil {
-			panic(err)
+			if err != io.EOF {
+				panic(err)
+			}
+			goto sendDir
 		}
 		if !qfe.IsDir {
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", strconv.Quote(qfe.Name)))
@@ -71,6 +74,7 @@ func filesystem(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+sendDir:
 	var FPath = startDir
 	if qfe.Path != "" && qfe.IsDir {
 		FPath = path.Join(qfe.Path, qfe.Name)

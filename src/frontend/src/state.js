@@ -2,15 +2,7 @@ import { ref, computed } from 'vue';
 import axios from "axios";
 
 const api = axios.create();
-api.get("/fs").then(res => {
-    prevDir.value = res.data.prevPath;
-    files.value = res.data.files.map(e => {
-        if (!e.isDir) {
-            e.downloadProgress = 0.0;
-        }
-        return e;
-    });
-});
+
 function catchError(error) {
     let msg;
     if (error.response) {
@@ -52,7 +44,7 @@ const totalDownloadSize = computed(() => {
 });
 
 
-function getDir(obj = Object) {
+function getDir(obj) {
     // if dir fetch includes
     api.post("/fs", obj).then(res => {
         prevDir.value = res.data.prevPath;
@@ -80,6 +72,8 @@ function drop(event) {
     let dataIndex = event.dataTransfer.getData("FileIndex");
     listDownload.value.push(files.value[dataIndex]);
 }
+
+getDir();
 export default {
     title,
     prevDir,
