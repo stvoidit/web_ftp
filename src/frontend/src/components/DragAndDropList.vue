@@ -7,24 +7,25 @@
                 event.preventDefault();
             }"
             @drop="drop">
-            <div
-                v-for="file in listDownload"
-                :key="file.name"
-                class="mr-1 mb-1 row text-left">
-                <div class="col-auto">
-                    <button
-                        class="btn btn-sm btn-danger block"
-                        @click="removeFromListDownload(file)">
-                        x
-                    </button>
-                </div>
-                <div class="col-5">
-                    {{ `${file.path}/${file.name } [ ${file.hrSize} ]` }}
-                </div>
-                <div class="col mt-1">
-                    <ProgressBar :progress-velue="file.downloadProgress" />
-                </div>
-            </div>
+            <table class="table table-sm table-borderless">
+                <tbody>
+                    <tr
+                        v-for="file in listDownload"
+                        :key="file.name">
+                        <td scope="row">
+                            <button
+                                class="btn btn-sm btn-danger block"
+                                @click="removeFromListDownload(file)">
+                                x
+                            </button>
+                        </td>
+                        <td> {{ `${file.path}/${file.name } [ ${file.hrSize} ]` }}</td>
+                        <td width="40%;">
+                            <ProgressBar :progress-velue="file.downloadProgress" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div>
             total: {{ totalDownloadSize }} <button
