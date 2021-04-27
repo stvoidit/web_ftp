@@ -18,27 +18,19 @@
             {{ file.name }}
             <template v-if="file.hrSize">
                 [{{ file.hrSize }}]
-                <div
+                <ProgressBar
                     v-if="file.downloadProgress"
-                    class="progress">
-                    <div
-                        :style="{width: `${file.downloadProgress}%`}"
-                        class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                        role="progressbar"
-                        :aria-valuenow="file.downloadProgress"
-                        aria-valuemin="0"
-                        aria-valuemax="100">
-                        {{ file.downloadProgress.toFixed(2) }}%
-                    </div>
-                </div>
+                    :progress-velue="file.downloadProgress" />
             </template>
         </button>
     </div>
 </template>
 
 <script>
+import ProgressBar from "./ProgressBar";
 import state from "@/state";
 export default {
+    components: { ProgressBar },
     setup() {
         const {
             title,

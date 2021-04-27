@@ -22,22 +22,10 @@
                     {{ `${file.path}/${file.name }` }}
                 </div>
                 <div class="col mt-1">
-                    <div
-                        class="progress ">
-                        <div
-                            :style="{width: `${file.downloadProgress}%`}"
-                            class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                            role="progressbar"
-                            :aria-valuenow="file.downloadProgress"
-                            aria-valuemin="0"
-                            aria-valuemax="100">
-                            {{ file.downloadProgress.toFixed(2) }}%
-                        </div>
-                    </div>
+                    <ProgressBar :progress-velue="file.downloadProgress" />
                 </div>
             </div>
         </div>
-
         <div>
             total: {{ totalDownloadSize }} <button
                 v-show="listDownload.length"
@@ -50,8 +38,10 @@
 </template>
 
 <script>
+import ProgressBar from "./ProgressBar";
 import state from "@/state";
 export default {
+    components: { ProgressBar },
     setup() {
         const {
             listDownload,
