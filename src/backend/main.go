@@ -16,12 +16,12 @@ func humanReadableSize(n int64) (hrs string) {
 		return
 	}
 	const Mb = 1048576
-	const GB = 1073741824
+	const Gb = 1073741824
 	switch {
-	case n >= Mb && n < GB:
+	case n >= Mb && n < Gb:
 		hrs = fmt.Sprintf("%dMb", n/Mb)
-	case n >= GB:
-		hrs = fmt.Sprintf("%dGb", n/GB)
+	case n >= Gb:
+		hrs = fmt.Sprintf("%dGb", n/Gb)
 	default:
 		hrs = fmt.Sprintf("%db", n)
 	}

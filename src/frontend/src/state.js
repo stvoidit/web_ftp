@@ -39,11 +39,21 @@ const prevDir = ref("");
 const files = ref([]);
 const listDownload = ref([]);
 const totalDownloadSize = computed(() => {
+    const Mb = 1048576;
+    const Gb = 1073741824;
     let totalSize = 0;
     listDownload.value.forEach(e => {
         totalSize += e.size;
     });
-    return totalSize;
+    let hSize = "";
+    if (totalSize >= Mb && totalSize < Gb) {
+        hSize = `${(totalSize / Mb).toFixed(2)}Mb`;
+    } else if (totalSize >= Gb) {
+        hSize = `${(totalSize / Gb).toFixed(2)}Gb`;
+    } else {
+        hSize = `${totalSize}b`;
+    }
+    return hSize;
 });
 
 function removeFromListDownload(obj) {
