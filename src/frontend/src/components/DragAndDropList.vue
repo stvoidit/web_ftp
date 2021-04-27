@@ -1,6 +1,6 @@
 <template>
     <div class="sticky-col">
-        <h4>список скачивания</h4>
+        <h4>download list</h4>
         <div
             class="droptarget container mb-2"
             @dragover="(event) => {
@@ -19,7 +19,8 @@
                                 x
                             </button>
                         </td>
-                        <td> {{ `${file.path}/${file.name } [ ${file.hrSize} ]` }}</td>
+                        <td> {{ `${file.path}/${file.name }` }}</td>
+                        <td> {{ file.hrSize }}</td>
                         <td width="40%;">
                             <ProgressBar :progress-velue="file.downloadProgress" />
                         </td>
