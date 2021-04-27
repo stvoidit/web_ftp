@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 <div class="col-5">
-                    {{ `${file.path}/${file.name }` }}
+                    {{ `${file.path}/${file.name } [ ${file.hrSize} ]` }}
                 </div>
                 <div class="col mt-1">
                     <ProgressBar :progress-velue="file.downloadProgress" />

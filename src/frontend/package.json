@@ -10,8 +10,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
-    "core-js": "^3.6.5",
-    "global": "^4.4.0",
     "vue": "^3.0.0"
   },
   "devDependencies": {
