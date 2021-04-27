@@ -11,6 +11,8 @@ import (
 	"strconv"
 )
 
+var startDir, _ = os.UserHomeDir()
+
 func humanReadableSize(n int64) (hrs string) {
 	if n == 0 {
 		return
@@ -48,8 +50,6 @@ type FileEntity struct {
 
 func filesystem(w http.ResponseWriter, r *http.Request) {
 	defer log.Println(r.Method, r.RequestURI, r.ContentLength)
-	// var startDir, _ = os.UserHomeDir()
-	const startDir = "/mnt/d"
 	var qfe FileEntity
 	if r.Method == http.MethodPost {
 		if err := json.NewDecoder(r.Body).Decode(&qfe); err != nil {

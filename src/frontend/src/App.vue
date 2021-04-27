@@ -15,7 +15,10 @@
 import DragAndDropList from "./components/DragAndDropList";
 import FilesNavigate from "./components/FilesNavigate";
 export default {
-    components: { DragAndDropList, FilesNavigate }
+    components: { DragAndDropList, FilesNavigate },
+    setup() {
+        document.title = "web FTP";
+    }
 };
 </script>
 <style src="bootstrap/dist/css/bootstrap.min.css"></style>
