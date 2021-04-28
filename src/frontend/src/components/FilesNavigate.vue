@@ -1,20 +1,32 @@
 <template>
-    <h4>{{ prevDir }}</h4>
-    <div class="btn-group-vertical">
-        <button
-            class="btn btn-info btn-sm block mb-1"
+    <article class="panel is-link">
+        <p class="panel-heading">
+            {{ prevDir }}
+        </p>
+        <a
+            class="panel-block has-background-primary-light"
             @click="actionHandler({path: prevDir, name:'..', isDir: true})">
+            <span class="panel-icon">
+                <i
+                    class="fas fa-book"
+                    aria-hidden="true" />
+            </span>
             ...
-        </button>
-        <button
+        </a>
+        <a
             v-for="(file, index) in files"
             :id="index"
             :key="file.name"
+            class="panel-block"
+            :class="{'has-background-info-light': file.isDir}"
             draggable="true"
-            :class="{'btn-primary': file.isDir, 'btn-outline-dark': !file.isDir}"
-            class="btn btn-sm block mb-1"
             @dragstart="dragStart"
             @click="actionHandler(file)">
+            <span class="panel-icon">
+                <i
+                    class="fas fa-book"
+                    aria-hidden="true" />
+            </span>
             {{ file.name }}
             <template v-if="file.hrSize">
                 [{{ file.hrSize }}]
@@ -22,8 +34,8 @@
                     v-if="file.downloadProgress"
                     :progress-velue="file.downloadProgress" />
             </template>
-        </button>
-    </div>
+        </a>
+    </article>
 </template>
 
 <script>

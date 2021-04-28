@@ -1,10 +1,10 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
+    <div class="container is-fluid mt-3">
+        <div class="columns">
+            <div class="column">
                 <FilesNavigate />
             </div>
-            <div class="col">
+            <div class="column">
                 <DragAndDropList />
             </div>
         </div>
@@ -21,10 +21,5 @@ export default {
     }
 };
 </script>
-<style src="bootstrap/dist/css/bootstrap.min.css"></style>
-<style >
-.block {
-    border-radius: 0 !important;
-    text-align: left !important;
-}
-</style>
+
+<style src="bulma/css/bulma.min.css"></style>

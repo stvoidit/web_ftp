@@ -2,19 +2,19 @@
     <div class="sticky-col">
         <h4>download list</h4>
         <div
-            class="droptarget container mb-2"
+            class="droptarget mb-2 box"
             @dragover="(event) => {
                 event.preventDefault();
             }"
             @drop="drop">
-            <table class="table table-sm table-borderless">
+            <table class="table is-fullwidth">
                 <tbody>
                     <tr
                         v-for="file in listDownload"
                         :key="file.name">
                         <td scope="row">
                             <button
-                                class="btn btn-sm btn-danger block"
+                                class="button is-danger is-small"
                                 @click="removeFromListDownload(file)">
                                 x
                             </button>
@@ -29,9 +29,9 @@
             </table>
         </div>
         <div>
-            total: {{ totalDownloadSize }} <button
+            <b>total:</b> {{ totalDownloadSize }} <button
                 v-show="listDownload.length"
-                class="btn btn-sm block btn-primary"
+                class="button is-small is-success"
                 @click="DownloadFiles">
                 download
             </button>

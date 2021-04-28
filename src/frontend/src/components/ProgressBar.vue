@@ -1,16 +1,10 @@
 <template>
-    <div
-        class="progress ">
-        <div
-            :style="{width: `${pb}%`}"
-            class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-            role="progressbar"
-            :aria-valuenow="pb"
-            aria-valuemin="0"
-            aria-valuemax="100">
-            {{ pb.toFixed(2) }}%
-        </div>
-    </div>
+    <progress
+        class="progress is-info is-medium"
+        :value="pb"
+        max="100">
+        {{ pb.toFixed(2) }}%
+    </progress>
 </template>
 
 <script>
