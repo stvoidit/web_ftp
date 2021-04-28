@@ -19,7 +19,7 @@ function downloadFile(obj = Object) {
             obj.downloadProgress = (eventdownload.loaded / eventdownload.total) * 100.;
         }
     });
-    return downloadClient.post("/fs", obj, { responseType: "blob" }).then(res => {
+    return downloadClient.post("/api/fs", obj, { responseType: "blob" }).then(res => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.setAttribute("href", url);
@@ -35,7 +35,7 @@ function downloadFile(obj = Object) {
     }).catch(catchError);
 }
 
-const title = ref("referf");
+const title = ref("");
 const prevDir = ref("");
 const files = ref([]);
 const listDownload = ref([]);
@@ -62,7 +62,7 @@ function removeFromListDownload(obj) {
 }
 function getDir(obj) {
     // if dir fetch includes
-    api.post("/fs", obj).then(res => {
+    api.post("/api/fs", obj).then(res => {
         prevDir.value = res.data.prevPath;
         files.value = res.data.files.map(e => {
             if (!e.isDir) {

@@ -111,10 +111,11 @@ sendDir:
 	if err := json.NewEncoder(w).Encode(map[string]interface{}{"prevPath": FPath, "files": data}); err != nil {
 		panic(err)
 	}
-
 }
 
 func main() {
-	http.HandleFunc("/fs", filesystem)
-	http.ListenAndServe(":9000", nil)
+	mux := http.NewServeMux()
+	mux.Handle("/", http.FileServer(http.FS(os.DirFS(`static`))))
+	mux.HandleFunc("/api/fs", filesystem)
+	http.ListenAndServe(":9000", mux)
 }
