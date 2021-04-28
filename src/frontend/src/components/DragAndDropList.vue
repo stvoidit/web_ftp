@@ -1,11 +1,17 @@
 <template>
     <div class="sticky-col">
-        <h4>download list</h4>
+        <div class="mb-1">
+            <b>download list  total:</b> {{ totalDownloadSize }}
+            <button
+                v-show="listDownload.length"
+                class="button is-small is-success"
+                @click="DownloadFiles">
+                download
+            </button>
+        </div>
         <div
             class="droptarget mb-2 box"
-            @dragover="(event) => {
-                event.preventDefault();
-            }"
+            @dragover="(event) => {event.preventDefault();}"
             @drop="drop">
             <table class="table is-fullwidth">
                 <tbody>
@@ -27,14 +33,6 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <div>
-            <b>total:</b> {{ totalDownloadSize }} <button
-                v-show="listDownload.length"
-                class="button is-small is-success"
-                @click="DownloadFiles">
-                download
-            </button>
         </div>
     </div>
 </template>

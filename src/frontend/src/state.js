@@ -22,11 +22,12 @@ function downloadFile(obj = Object) {
     return downloadClient.post("/fs", obj, { responseType: "blob" }).then(res => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
-        link.href = url;
+        link.setAttribute("href", url);
         link.setAttribute("download", obj.name);
         document.body.appendChild(link);
         link.click();
         link.remove();
+        URL.revokeObjectURL(link.href);
         obj.downloadProgress = 0.0;
         return new Promise((resolve) => {
             resolve("OK!");
