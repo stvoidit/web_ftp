@@ -86,7 +86,10 @@ function dragStart(event) {
 function drop(event) {
     event.preventDefault();
     let dataIndex = event.dataTransfer.getData("FileIndex");
-    listDownload.value.push(files.value[dataIndex]);
+    if (listDownload.value.indexOf(files.value[dataIndex]) === -1) {
+        // add only once
+        listDownload.value.push(files.value[dataIndex]);
+    }
 }
 
 getDir();
